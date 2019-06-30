@@ -14,6 +14,9 @@ export default {
   name: "app",
   components: {
     HelloWorld
+  },
+  rules: {
+    banana: "hey look i made a plugin :D"
   }
 };
 </script>
