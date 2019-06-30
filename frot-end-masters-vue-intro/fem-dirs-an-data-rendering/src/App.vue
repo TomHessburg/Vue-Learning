@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld/>
+    <HelloWorld>
+      <p slot="slot1">This was input with a named slot</p>
+    </HelloWorld>
   </div>
 </template>
 

@@ -1,5 +1,7 @@
 <template>
-  <div class="hello" @click="entered = !entered" :class="entered && 'entered'">
+  <div class="hello" @keypress.enter="entered = !entered" :class="entered && 'entered'">
+    <slot name="slot1"></slot>
+
     <!-- : === v-bind: -->
     <ul>
       <li
@@ -36,6 +38,24 @@
       <label>=</label>
       <label>{{ num1 + num2 }}</label>
     </div>
+    <p>{{ allTheNames }}</p>
+    <p>this number is coming from the store: {{ numFromStore }}</p>
+    <button @click="asyncTen">Async Increment Store Num</button>
+
+    <div>
+      <div v-for="post in posts" :key="post">
+        <hr>
+        <h4>{{post.title}}</h4>
+        <p>{{post.content}}</p>
+      </div>
+    </div>
+    <form>
+      <label>title</label>
+      <input type="text" v-model="title" required>
+      <label>content</label>
+      <input type="text" v-model="content" required>
+      <button @click="subtmitForm">Submit</button>
+    </form>
   </div>
   <!-- can do things like @submit.prevent to prevent default, or @click.once to only allow 1 click -->
   <!-- keycodes are avaibale, for example @enter. can also add your own. -->
@@ -45,7 +65,7 @@
 export default {
   name: "HelloWorld",
   props: {
-    msg: String
+    // msg: String
   },
   data() {
     return {
@@ -54,12 +74,46 @@ export default {
       checkedNames: [],
       entered: false,
       num1: 0,
-      num2: 0
+      num2: 0,
+      title: "",
+      content: "",
+      posts: [
+        {
+          title: "I'm Learning!",
+          content: "Im here trying to learn some Vue!! :D"
+        }
+      ]
     };
   },
   methods: {
     clickingCheckBox(e) {
       console.log(e.target.value);
+    },
+    subtmitForm(e) {
+      e.preventDefault();
+      let newPost = {
+        title: this.title,
+        content: this.content
+      };
+      this.title = "";
+      this.content = "";
+      this.posts.push(newPost);
+    },
+    asyncTen() {
+      this.$store.dispatch("increment", 1000);
+    }
+  },
+  computed: {
+    allTheNames() {
+      return `${JSON.stringify(this.people)}`;
+    },
+    numFromStore() {
+      return this.$store.getters.currentNum;
+    }
+  },
+  watch: {
+    content() {
+      console.log("the content has changed!");
     }
   }
 };
@@ -86,13 +140,26 @@ a {
   border-bottom: 1px solid black;
 }
 .is-checked {
-  color: rgb(196, 27, 27);
+  color: rgb(10, 233, 25);
+  font-weight: 400;
 }
 .coolguy {
   color: rgb(0, 74, 184);
 }
 .entered {
-  background: rgba(0, 0, 0, 0.01);
+  background: rgba(142, 9, 9, 0.523);
   padding-bottom: 16px;
+}
+form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 200px;
+  margin: auto;
+  margin-bottom: 32px;
+}
+input {
+  padding: 8px;
+  margin-bottom: 8px;
 }
 </style>
