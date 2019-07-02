@@ -2,6 +2,32 @@
   <div class="dashboard">
     <h1 class="subheading grey--text">Dashboard</h1>
     <v-container class="my-5">
+      <v-layout row class="mb-3">
+        <v-tooltip top>
+          <v-btn small slot="activator" flat color="grey" @click="sortBy('title')">
+            <v-icon left small>folder</v-icon>
+            <span class="caption text-lowercase">By project name</span>
+          </v-btn>
+          <span>order by project name</span>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <v-btn slot="activator" small flat color="grey" @click="sortBy('person')">
+            <v-icon left small>person</v-icon>
+            <span class="caption text-lowercase">By person</span>
+          </v-btn>
+          <span>order by person name</span>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <v-btn slot="activator" small flat color="grey" @click="sortBy('status')">
+            <v-icon left small>check</v-icon>
+            <span class="caption text-lowercase">By status</span>
+          </v-btn>
+          <span>order by project status</span>
+        </v-tooltip>
+      </v-layout>
+
       <v-card flat v-for="project in projects" :key="project.title">
         <v-layout row wrap :class="`pa-3 project ${project.status}`">
           <v-flex xs12 md6>
@@ -17,8 +43,9 @@
             <div>{{ project.due }}</div>
           </v-flex>
           <v-flex xs2 sm4 md2>
-            <div class="caption grey--text">Status</div>
-            <div>{{ project.status }}</div>
+            <div class="right">
+              <v-chip :class="`${project.status} white--text caption my-2`">{{ project.status }}</v-chip>
+            </div>
           </v-flex>
         </v-layout>
         <v-divider></v-divider>
@@ -66,6 +93,13 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    sortBy(prop) {
+      this.projects = this.projects.sort((a, b) =>
+        a[prop] < b[prop] ? -1 : 1
+      );
+    }
   }
 };
 </script>
@@ -79,6 +113,15 @@ export default {
 }
 .project.overdue {
   border-left: 4px solid tomato;
+}
+.v-chip.complete {
+  background: #3cd1c2;
+}
+.v-chip.ongoing {
+  background: #ffaa2c;
+}
+.v-chip.overdue {
+  background: #f83e70;
 }
 </style>
 
